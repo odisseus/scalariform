@@ -3,28 +3,51 @@ package scalariform.formatter
 import scalariform.formatter.preferences._
 import scalariform.parser._
 
-// format: OFF
+
 class NestedAnonymousFunctionsTest extends AbstractFormatterTest {
+  // format: OFF
+  {
+    implicit val formattingPreferences = FormattingPreferences
+      .setPreference(NewlinesAtNestedAnonymousFunctions, Force)
 
-  implicit val formattingPreferences = FormattingPreferences
-    .setPreference(NewlinesAtNestedAnonymousFunctions, Force)
-    .setPreference(AlignParameters, true)
-    .setPreference(AlignSingleLineCaseStatements, true)
-    .setPreference(AlignSingleLineCaseStatements.MaxArrowIndent, 100)
-    .setPreference(AlignArguments, true)
-
-   """def bar: Int => Int => String = {
-      |  x: Int =>
-      |    y: Int =>
-      |      "x"
+    """def foo: Int => Int => String = { x: Int => y: Int =>
+      |  "x"
       |}""" ==>
-   """def bar: Int => Int => String = {
+      """def foo: Int => Int => String = {
       |  x: Int =>
       |    y: Int =>
       |      "x"
       |}"""
+  }
 
-//  format: ON
+  {
+    implicit val formattingPreferences = FormattingPreferences
+      .setPreference(NewlinesAtNestedAnonymousFunctions, Prevent)
+
+    """def bar: Int => Int => String = {
+      |  x: Int =>
+      |    y: Int =>
+      |      "x"
+      |}""" ==>
+      """def bar: Int => Int => String = { x: Int => y: Int =>
+        |  "x"
+        |}"""
+  }
+
+  {
+    implicit val formattingPreferences = FormattingPreferences
+      .setPreference(NewlinesAtNestedAnonymousFunctions, Preserve)
+
+    """def baz: Int => Int => String = { x: Int =>
+      |  y: Int =>
+      |    "x"
+      |}""" ==>
+      """def baz: Int => Int => String = { x: Int =>
+        |  y: Int =>
+        |    "x"
+        |}"""
+  }
+  //  format: ON
 
   override val debug = false
 
