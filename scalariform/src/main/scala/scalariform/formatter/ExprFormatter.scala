@@ -824,7 +824,7 @@ trait ExprFormatter { self: HasFormattingPreferences with AnnotationFormatter wi
                   } yield head.isInstanceOf[AnonymousFunction]).getOrElse(false)
 
                 val (instruction, subStatState) =
-                  if (hasNestedAnonymousFunction(subStatSeq))
+                  if (formattingPreferences(NewlinesAtNestedAnonymousFunctions) == Prevent && hasNestedAnonymousFunction(subStatSeq))
                     (CompactEnsuringGap, indentedState.indent(-1))
                   else if (hiddenPredecessors(params.head.firstToken).containsNewline)
                     (indentedInstruction, indentedState.indent)
@@ -834,7 +834,7 @@ trait ExprFormatter { self: HasFormattingPreferences with AnnotationFormatter wi
                 formatResult ++= format(params)
                 for (firstToken ← subStatSeq.firstTokenOption) {
                   val instruction =
-                    if (hasNestedAnonymousFunction(subStatSeq))
+                    if (formattingPreferences(NewlinesAtNestedAnonymousFunctions) == Prevent && hasNestedAnonymousFunction(subStatSeq))
                       CompactEnsuringGap
                     else if (hiddenPredecessors(firstToken).containsNewline || containsNewline(subStatSeq))
                       statFormatterState(subStatSeq.firstStatOpt)(subStatState).currentIndentLevelInstruction
