@@ -46,6 +46,13 @@ class NestedAnonymousFunctionsTest extends AbstractFormatterTest {
         |  y: Int =>
         |    "x"
         |}"""
+
+    """def quux: Int => Int => String = { x: Int => y: Int =>
+      |  "x"
+      |}""" ==>
+      """def quux: Int => Int => String = { x: Int => y: Int =>
+        |  "x"
+        |}"""
   }
   //  format: ON
 
